@@ -14,9 +14,11 @@ import java.util.List;
 public class PersonajesAdapter extends RecyclerView.Adapter {
 
     private List<Personaje> listaDePersonajes;
+    private PersonajesAdapterListener listener;
 
-    public PersonajesAdapter(List<Personaje> personajeList) {
+    public PersonajesAdapter(List<Personaje> personajeList, PersonajesAdapterListener listener) {
         listaDePersonajes = personajeList;
+        this.listener = listener;
     }
 
     @NonNull
@@ -52,14 +54,25 @@ public class PersonajesAdapter extends RecyclerView.Adapter {
             imagen = itemView.findViewById(R.id.celdaPersonajeImageView);
             textViewEditora = itemView.findViewById(R.id.celdaPersonajeTextViewEditora);
             textViewNombre = itemView.findViewById(R.id.celdaPersonajeTextViewNombre);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int posicion = getAdapterPosition();
+                    Personaje personaje = listaDePersonajes.get(posicion);
+                    listener.pulsaronelemento(personaje);
+                }
+            });
         }
 
         public void cagarPersonaje ( Personaje unPersonaje ){
             imagen.setImageResource(unPersonaje.getImagen());
             textViewNombre.setText(unPersonaje.getNombre());
             textViewEditora.setText(unPersonaje.getEditora());
-
         }
+    }
 
+    public interface PersonajesAdapterListener {
+        public void pulsaronelemento (Personaje personaje);
     }
 }
